@@ -172,6 +172,8 @@ class ScriptChainConfig(YamlConfig):
             ScriptConfig.from_dict(i)
             for i in self.get('script_list', [])
         ]
+        for config in self.script_list:
+            config.script_path = self._to_runtime_script_path(config.script_path)
         self.init_idx()
 
     def _get_script_chain_dir(self) -> Path:
@@ -182,14 +184,34 @@ class ScriptChainConfig(YamlConfig):
         d.mkdir(parents=True, exist_ok=True)
         return d
 
+    def _to_runtime_script_path(self, path: str) -> str:
+        """配置里的相对路径按脚本链目录解析，绝对路径原样使用。"""
+        if not path:
+            return path
+        p = Path(path)
+        if p.is_absolute() or self.file_path is None:
+            return str(p)
+        return str((self._get_script_chain_dir() / p).resolve())
+
+    def _to_storage_script_path(self, path: str) -> str:
+        """保存时把脚本链目录内的路径写成相对路径，外部路径保持不变。"""
+        if not path or self.file_path is None:
+            return path
+        try:
+            return Path(path).resolve().relative_to(
+                self._get_script_chain_dir().resolve()
+            ).as_posix()
+        except ValueError:
+            return path
+
     def get_python_script_content(self, idx: int) -> str:
-        p = Path(self.script_list[idx].script_path) if self.script_list[idx].script_path else None
+        p = Path(self._to_runtime_script_path(self.script_list[idx].script_path)) if self.script_list[idx].script_path else None
         if p and p.exists():
             return p.read_text(encoding='utf-8')
         return ''
 
     def save_python_script(self, idx: int, code: str) -> str:
-        path = self.script_list[idx].script_path
+        path = self._to_runtime_script_path(self.script_list[idx].script_path)
         if not path:
             num = self._next_python_script_number()
             path = str(self._get_python_scripts_dir() / f'{self.module_name}_{num}.py')
@@ -201,7 +223,7 @@ class ScriptChainConfig(YamlConfig):
     def _is_managed_script(self, path: str) -> bool:
         """判断脚本文件是否在 scripts/ 管理目录内。"""
         try:
-            Path(path).resolve().relative_to(self._get_python_scripts_dir().resolve())
+            Path(self._to_runtime_script_path(path)).resolve().relative_to(self._get_python_scripts_dir().resolve())
             return True
         except ValueError:
             return False
@@ -254,7 +276,13 @@ class ScriptChainConfig(YamlConfig):
 
     def save(self):
         self.data = {
-            'script_list': [i.to_dict() for i in self.script_list]
+            'script_list': [
+                {
+                    **i.to_dict(),
+                    'script_path': self._to_storage_script_path(i.script_path),
+                }
+                for i in self.script_list
+            ]
         }
         YamlConfig.save(self)
 
@@ -283,7 +311,7 @@ class ScriptChainConfig(YamlConfig):
         if config.script_type == ScriptType.PYTHON and config.script_path:
             if self._is_managed_script(config.script_path):
                 with suppress(OSError):
-                    Path(config.script_path).unlink()
+                    Path(self._to_runtime_script_path(config.script_path)).unlink()
         del self.script_list[index]
         self.init_idx()
         self.save()
