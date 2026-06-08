@@ -24,6 +24,9 @@ class ScriptProcessName(Enum):
     SRA = ConfigItem(label='StarRailAssistant', value='SRA-cli.exe')
     MAA_END = ConfigItem(label='MaaEnd', value='MaaEnd.exe')
     MAA_GF2 = ConfigItem(label='MaaGF2', value='MaaGF2Exilium.exe')
+    OK_WW = ConfigItem(label='ok-ww', value='pythonw.exe')
+    OK_EF = ConfigItem(label='ok-ef', value='pythonw.exe')
+    OK_NTE = ConfigItem(label='ok-nte', value='pythonw.exe')
 
 
 class GameProcessName(Enum):
@@ -35,6 +38,8 @@ class GameProcessName(Enum):
     HONKAI_IMPACT_CN = ConfigItem(label='崩坏3', value='BH3.exe')
     ENDFIELD = ConfigItem(label='终末地', value='Endfield.exe')
     MUMU = ConfigItem(label='MUMU模拟器', value='MuMuNxDevice.exe')
+    WuWa = ConfigItem(label='鸣潮', value='Client-Win64-Shipping.exe')
+    NTE = ConfigItem(label='异环', value='HTGame.exe')
 
 
 class ScriptType:
