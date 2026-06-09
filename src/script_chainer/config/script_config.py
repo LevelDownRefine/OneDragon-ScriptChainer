@@ -28,7 +28,7 @@ class ScriptLaunchMethod(Enum):
 class ScriptProcessName(Enum):
 
     ONE_DRAGON_LAUNCHER = ConfigItem(label='一条龙', value=['python.exe', 'pythonw.exe'])
-    OK_SCRIPTS = ConfigItem(label='OK', value='pythonw.exe')
+    OK_SCRIPTS = ConfigItem(label='OK', value=['pythonw.exe'])
 
 
 class GameProcessName(Enum):
