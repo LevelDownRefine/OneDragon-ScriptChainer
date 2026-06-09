@@ -28,6 +28,7 @@ class ScriptLaunchMethod(Enum):
 class ScriptProcessName(Enum):
 
     ONE_DRAGON_LAUNCHER = ConfigItem(label='一条龙', value=['python.exe', 'pythonw.exe'])
+    OK_SCRIPTS = ConfigItem(label='OK', value='pythonw.exe')
 
 
 class GameProcessName(Enum):
@@ -39,6 +40,8 @@ class GameProcessName(Enum):
     HONKAI_IMPACT_CN = ConfigItem(label='崩坏3', value='BH3.exe')
     ENDFIELD = ConfigItem(label='终末地', value='Endfield.exe')
     MUMU = ConfigItem(label='MUMU模拟器', value='MuMuNxDevice.exe')
+    WuWa = ConfigItem(label='鸣潮', value='Client-Win64-Shipping.exe')
+    NTE = ConfigItem(label='异环', value='HTGame.exe')
 
 
 class ScriptType:
