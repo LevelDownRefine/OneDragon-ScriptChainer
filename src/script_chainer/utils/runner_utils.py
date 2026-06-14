@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import sys
+from pathlib import Path
 
 
 def build_runner_command(chain_name: str, script_index: int | None = None) -> tuple[list[str], str | None]:
@@ -13,9 +14,6 @@ def build_runner_command(chain_name: str, script_index: int | None = None) -> tu
 
     Returns:
         启动命令及其工作目录。
-
-    Raises:
-        RuntimeError: 源码模式下不支持运行脚本链。
     """
     if getattr(sys, 'frozen', False):
         command = [
@@ -27,5 +25,18 @@ def build_runner_command(chain_name: str, script_index: int | None = None) -> tu
         if script_index is not None:
             command.extend(['--debug-index', str(script_index)])
         return command, os.path.dirname(sys.executable) or None
-
-    raise RuntimeError('源码模式下不支持运行脚本链，请使用打包后的程序。')
+    else: # 源码模式
+        command = [
+            sys.executable,
+            "-m",
+            "src.script_chainer.win_exe.launcher",
+            "--onedragon",
+            "--chain",
+            chain_name,
+        ]
+        if script_index is not None:
+            command.extend(["--debug-index", str(script_index)])
+        # 根据该文件路径OneDragon-ScriptChainer\\src\\script_chainer\\utils\\runner_utils.py
+        # 上跳三级得到仓库根目录 OneDragon-ScriptChainer
+        repo_root = str(Path(__file__).resolve().parents[3])
+        return command, repo_root
