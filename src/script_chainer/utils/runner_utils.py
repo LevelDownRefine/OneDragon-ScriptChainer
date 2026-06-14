@@ -26,17 +26,17 @@ def build_runner_command(chain_name: str, script_index: int | None = None) -> tu
             command.extend(['--debug-index', str(script_index)])
         return command, os.path.dirname(sys.executable) or None
     else: # 源码模式
+        # 根据该文件路径OneDragon-ScriptChainer\\src\\script_chainer\\utils\\runner_utils.py
+        # 上跳三级得到仓库根目录 OneDragon-ScriptChainer
+        repo_root = str(Path(__file__).resolve().parents[3])
+        launcher_path = os.path.join(repo_root, "src", "script_chainer", "win_exe", "launcher.py")
         command = [
             sys.executable,
-            "-m",
-            "src.script_chainer.win_exe.launcher",
+            launcher_path,
             "--onedragon",
             "--chain",
             chain_name,
         ]
         if script_index is not None:
             command.extend(["--debug-index", str(script_index)])
-        # 根据该文件路径OneDragon-ScriptChainer\\src\\script_chainer\\utils\\runner_utils.py
-        # 上跳三级得到仓库根目录 OneDragon-ScriptChainer
-        repo_root = str(Path(__file__).resolve().parents[3])
         return command, repo_root
