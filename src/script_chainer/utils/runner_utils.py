@@ -2,8 +2,13 @@ from __future__ import annotations
 
 import os
 import sys
-from pathlib import Path
+from one_dragon.utils.os_utils import get_work_dir, get_path_under_work_dir
 
+
+def get_launcher_path() -> str:
+    """获取 launcher 路径。"""
+    repo_root = get_work_dir()
+    return get_path_under_work_dir(repo_root, "src", "script_chainer", "win_exe", "launcher.py")
 
 def build_runner_command(chain_name: str, script_index: int | None = None) -> tuple[list[str], str | None]:
     """构造 runner 启动命令。
@@ -24,14 +29,8 @@ def build_runner_command(chain_name: str, script_index: int | None = None) -> tu
         command = [sys.executable, *common_args]
         return command, os.path.dirname(sys.executable) or None
     else: # 源码模式
-        file_path = Path(__file__).resolve()
-        if len(file_path.parents) < 4:
-            raise RuntimeError(f"无法确定仓库根目录: {file_path}")
-
-        # 根据该文件路径OneDragon-ScriptChainer\\src\\script_chainer\\utils\\runner_utils.py
-        # 上跳三级得到仓库根目录 OneDragon-ScriptChainer
-        repo_root = str(file_path.parents[3])
-        launcher_path = str(Path(repo_root) / "src" / "script_chainer" / "win_exe" / "launcher.py")
+        repo_root = get_work_dir()
+        launcher_path = get_launcher_path()
         command = [
             sys.executable,
             launcher_path,
