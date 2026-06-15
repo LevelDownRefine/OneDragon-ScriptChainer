@@ -7,8 +7,7 @@ from one_dragon.utils.os_utils import get_work_dir, get_path_under_work_dir
 
 def get_launcher_path() -> str:
     """获取 launcher 路径。"""
-    repo_root = get_work_dir()
-    return get_path_under_work_dir(repo_root, "src", "script_chainer", "win_exe", "launcher.py")
+    return get_path_under_work_dir("src", "script_chainer", "win_exe", "launcher.py")
 
 def build_runner_command(chain_name: str, script_index: int | None = None) -> tuple[list[str], str | None]:
     """构造 runner 启动命令。
