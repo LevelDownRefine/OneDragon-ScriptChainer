@@ -2,12 +2,8 @@ from __future__ import annotations
 
 import os
 import sys
-from one_dragon.utils.os_utils import get_work_dir, get_path_under_work_dir
+from one_dragon.utils.os_utils import get_path_under_work_dir
 
-
-def get_launcher_path() -> str:
-    """获取 launcher 路径。"""
-    return get_path_under_work_dir("src", "script_chainer", "win_exe", "launcher.py")
 
 def build_runner_command(chain_name: str, script_index: int | None = None) -> tuple[list[str], str | None]:
     """构造 runner 启动命令。
@@ -28,11 +24,11 @@ def build_runner_command(chain_name: str, script_index: int | None = None) -> tu
         command = [sys.executable, *common_args]
         return command, os.path.dirname(sys.executable) or None
     else: # 源码模式
-        repo_root = get_work_dir()
-        launcher_path = get_launcher_path()
+        launcher_work_dir = get_path_under_work_dir("src")
         command = [
             sys.executable,
-            launcher_path,
+            "-m",
+            "script_chainer.win_exe.launcher",
             *common_args,
         ]
-        return command, repo_root
+        return command, launcher_work_dir
