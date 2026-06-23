@@ -39,6 +39,7 @@ from script_chainer.config.script_config import (
     GameProcessName,
     ScriptConfig,
     ScriptProcessName,
+    ScriptType,
 )
 from script_chainer.utils.process_name_utils import normalize_process_names
 
@@ -220,6 +221,19 @@ class ScriptEditInterface(VerticalScrollInterface):
         self.init_by_config(self.config)
         return content_widget
 
+    def _update_visibility_by_type(self) -> None:
+        """根据脚本类型更新卡片的可见性"""
+        is_python = self.config.script_type == ScriptType.PYTHON
+
+        self.script_path_opt.setVisible(not is_python)
+        self.launch_advanced_group.setVisible(not is_python)
+        self.game_process_name_opt.setVisible(not is_python)
+        self.run_timeout_seconds_opt.setVisible(not is_python)
+        self.check_done_opt.setVisible(not is_python)
+        self.kill_after_done_opt.setVisible(not is_python)
+        self.no_log_timeout_opt.setVisible(not is_python)
+        self.no_log_max_retries_opt.setVisible(not is_python)
+
     def on_save_clicked(self) -> None:
         if not self.validate():
             return
@@ -285,6 +299,7 @@ class ScriptEditInterface(VerticalScrollInterface):
         self.no_log_max_retries_input.setEnabled(no_log_enabled)
         self._sync_launch_method_ui()
         self._sync_launch_advanced_summary()
+        self._update_visibility_by_type()
 
     def eventFilter(self, watched: QObject, event: QEvent) -> bool:
         if watched is getattr(self, 'launcher_mode_switch', None):
