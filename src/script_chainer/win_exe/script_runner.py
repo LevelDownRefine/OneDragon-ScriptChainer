@@ -637,6 +637,8 @@ def _run_python_script(
     script_dir = script_file_abs.parent
     try:
         sys.argv = [script_path]
+        if script_config.script_arguments and script_config.script_arguments.strip():
+            sys.argv.extend(shlex.split(script_config.script_arguments, posix=False))
         sys.path.insert(0, str(script_dir))
         os.chdir(script_dir)
 
