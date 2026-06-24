@@ -148,6 +148,7 @@ class ScriptEditInterface(VerticalScrollInterface):
         self.script_arguments_opt = TextSettingCard(
             icon=FluentIcon.COMMAND_PROMPT,
             title='脚本启动参数',
+            content='（选填）传递给 Python 脚本的命令行参数',
         )
         self.script_arguments_opt.line_edit.setMinimumWidth(200)
         content_widget.add_widget(self.script_arguments_opt)

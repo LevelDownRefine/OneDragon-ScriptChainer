@@ -332,7 +332,9 @@ class PythonScriptSettingCard(ScriptCardMixin, DraggableListItem):
             script_arguments=self.config.script_arguments
         )
         if dialog.exec():
+            # 保存编辑器中的代码
             self.chain_config.save_python_script(self.config.idx, dialog.get_code())
+            # 保存用户输入的脚本启动参数
             self.config.script_arguments = dialog.get_arguments()
             self.value_changed.emit(self.config)
             self._update_display()

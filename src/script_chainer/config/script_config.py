@@ -148,6 +148,7 @@ class ScriptConfig:
     check_done: str = ''
     kill_script_after_done: bool = True
     kill_game_after_done: bool = True
+    # 外部脚本的启动参数
     script_arguments: str = ''
     notify_start: bool = True
     notify_done: bool = True

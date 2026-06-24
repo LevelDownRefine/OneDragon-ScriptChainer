@@ -636,10 +636,14 @@ def _run_python_script(
     script_path = str(script_file_abs)
     script_dir = script_file_abs.parent
     try:
+        # 重置 sys.argv 并填入脚本路径作为第一个参数
         sys.argv = [script_path]
+        # 解析并添加可能存在的启动参数
         if script_config.script_arguments and script_config.script_arguments.strip():
             sys.argv.extend(shlex.split(script_config.script_arguments, posix=False))
+        # 将脚本所在目录添加到系统路径以支持相对导入
         sys.path.insert(0, str(script_dir))
+        # 切换工作目录到脚本所在目录
         os.chdir(script_dir)
 
         if log_notifier is not None:
