@@ -504,6 +504,7 @@ class PythonCodeEditorDialog(BaseCodeEditorDialog):
         self.viewLayout.addWidget(self.editor)
 
     def _setup_arguments_layout(self) -> None:
+        """设置启动参数的布局"""
         args_layout = QHBoxLayout()
         args_label = BodyLabel("启动参数: ")
         self.args_input = LineEdit()
