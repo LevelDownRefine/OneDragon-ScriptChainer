@@ -198,6 +198,14 @@ def _make_stdout_callback(
     return _on_stdout
 
 
+def _get_args_list(script_arguments: str | None) -> list[str] | None:
+    """获取解析后的脚本启动参数列表"""
+    args_list = None
+    if script_arguments and script_arguments.strip():
+        args_list = shlex.split(script_arguments, posix=False)
+    return args_list
+
+
 def _launch_script(
     script_config: ScriptConfig,
     target_process_infos: list[ProcessInfo] | None = None,
@@ -222,9 +230,7 @@ def _launch_script(
     script_path = script_config.script_path
 
     # 解析启动参数
-    args_list = None
-    if script_config.script_arguments and script_config.script_arguments.strip():
-        args_list = shlex.split(script_config.script_arguments, posix=False)
+    args_list = _get_args_list(script_config.script_arguments)
 
     pm = ProcessManager()
     try:
@@ -637,6 +643,10 @@ def _run_python_script(
     script_dir = script_file_abs.parent
     try:
         sys.argv = [script_path]
+        # 解析并添加可能存在的启动参数
+        args_list = _get_args_list(script_config.script_arguments)
+        if args_list:
+            sys.argv.extend(args_list)
         sys.path.insert(0, str(script_dir))
         os.chdir(script_dir)
 
