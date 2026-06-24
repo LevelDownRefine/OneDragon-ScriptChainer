@@ -499,7 +499,7 @@ class PythonCodeEditorDialog(BaseCodeEditorDialog):
 
     def _setup_editor_layout(self) -> None:
         self.highlighter = PythonHighlighter(self.editor.document())
-
+        # 设置启动参数
         self._setup_arguments_layout()
         self.viewLayout.addWidget(self.editor)
 

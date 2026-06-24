@@ -329,7 +329,7 @@ class PythonScriptSettingCard(ScriptCardMixin, DraggableListItem):
             title='Python 脚本',
             initial_code=code,
             script_path=path,
-            script_arguments=self.config.script_arguments
+            script_arguments=self.config.script_arguments,
         )
         if dialog.exec():
             self.chain_config.save_python_script(self.config.idx, dialog.get_code())
