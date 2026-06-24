@@ -479,8 +479,9 @@ class PythonCodeEditorDialog(BaseCodeEditorDialog):
     """Python 代码编辑器弹窗"""
 
     def __init__(self, parent=None, title: str = "Python 脚本编辑器",
-                 initial_code: str = "", script_path: str = ""):
+                 initial_code: str = "", script_path: str = "", script_arguments: str = ""):
         self._script_path = script_path
+        self._script_arguments = script_arguments
         super().__init__(parent=parent, title=title,
                          placeholder="# 输入 Python 脚本",
                          initial_code=initial_code)
@@ -496,7 +497,19 @@ class PythonCodeEditorDialog(BaseCodeEditorDialog):
             self.buttonLayout.insertStretch(1)
 
     def _setup_editor_layout(self) -> None:
+        from qfluentwidgets import LineEdit
         self.highlighter = PythonHighlighter(self.editor.document())
+
+        args_layout = QHBoxLayout()
+        args_label = BodyLabel("启动参数: ")
+        self.args_input = LineEdit()
+        self.args_input.setPlaceholderText("请输入脚本启动参数 (例如: --a 1 --b 2)")
+        self.args_input.setText(self._script_arguments)
+        args_layout.addWidget(args_label)
+        args_layout.addWidget(self.args_input)
+        
+        self.viewLayout.addLayout(args_layout)
+        self.viewLayout.addSpacing(8)
         self.viewLayout.addWidget(self.editor)
 
     def _on_external_edit(self) -> None:
@@ -512,6 +525,9 @@ class PythonCodeEditorDialog(BaseCodeEditorDialog):
 
     def get_code(self) -> str:
         return self.editor.toPlainText()
+        
+    def get_arguments(self) -> str:
+        return self.args_input.text()
 
 
 class JsonHighlighter(QSyntaxHighlighter):
