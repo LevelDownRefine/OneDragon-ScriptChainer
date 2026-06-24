@@ -15,6 +15,7 @@ from qfluentwidgets import (
     BodyLabel,
     FluentIcon,
     FluentIconBase,
+    LineEdit,
     MessageBoxBase,
     PlainTextEdit,
     RoundMenu,
@@ -497,17 +498,16 @@ class PythonCodeEditorDialog(BaseCodeEditorDialog):
             self.buttonLayout.insertStretch(1)
 
     def _setup_editor_layout(self) -> None:
-        from qfluentwidgets import LineEdit
         self.highlighter = PythonHighlighter(self.editor.document())
 
         args_layout = QHBoxLayout()
         args_label = BodyLabel("启动参数: ")
         self.args_input = LineEdit()
-        self.args_input.setPlaceholderText("请输入脚本启动参数 (例如: --a 1 --b 2)")
+        self.args_input.setPlaceholderText("请输入脚本启动参数")
         self.args_input.setText(self._script_arguments)
         args_layout.addWidget(args_label)
         args_layout.addWidget(self.args_input)
-        
+
         self.viewLayout.addLayout(args_layout)
         self.viewLayout.addSpacing(8)
         self.viewLayout.addWidget(self.editor)
@@ -525,7 +525,7 @@ class PythonCodeEditorDialog(BaseCodeEditorDialog):
 
     def get_code(self) -> str:
         return self.editor.toPlainText()
-        
+
     def get_arguments(self) -> str:
         return self.args_input.text()
 
