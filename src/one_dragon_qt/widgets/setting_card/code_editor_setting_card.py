@@ -481,15 +481,6 @@ class PythonCodeEditorDialog(BaseCodeEditorDialog):
 
     def __init__(self, parent=None, title: str = "Python 脚本编辑器",
                  initial_code: str = "", script_path: str = "", script_arguments: str = ""):
-        """
-        初始化 Python 代码编辑器弹窗
-
-        :param parent: 父组件
-        :param title: 弹窗标题
-        :param initial_code: 初始显示的代码内容
-        :param script_path: 脚本的本地路径（用于外部编辑功能）
-        :param script_arguments: 脚本的启动参数
-        """
         self._script_path = script_path
         self._script_arguments = script_arguments
         super().__init__(parent=parent, title=title,
@@ -507,7 +498,6 @@ class PythonCodeEditorDialog(BaseCodeEditorDialog):
             self.buttonLayout.insertStretch(1)
 
     def _setup_editor_layout(self) -> None:
-        """设置编辑器布局，包括启动参数输入框和代码编辑器"""
         self.highlighter = PythonHighlighter(self.editor.document())
 
         args_layout = QHBoxLayout()
@@ -523,7 +513,6 @@ class PythonCodeEditorDialog(BaseCodeEditorDialog):
         self.viewLayout.addWidget(self.editor)
 
     def _on_external_edit(self) -> None:
-        """处理点击“外部编辑”按钮的事件，将内容保存并用系统默认应用打开该脚本文件"""
         if not self._script_path:
             return
         # 先将编辑器内容保存到磁盘
@@ -535,7 +524,6 @@ class PythonCodeEditorDialog(BaseCodeEditorDialog):
             log.error('打开外部编辑器失败: %s', self._script_path)
 
     def get_code(self) -> str:
-        """获取编辑器中的 Python 代码"""
         return self.editor.toPlainText()
 
     def get_arguments(self) -> str:
