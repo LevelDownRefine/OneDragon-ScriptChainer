@@ -249,7 +249,6 @@ class ScriptSettingRootInterface(VerticalScrollInterface):
                 card = PythonScriptSettingCard(
                     script_config, chain_config=self.chosen_config, index=i)
                 card.attach_changed.connect(self._update_attach_margins)
-                card.setting_requested.connect(self.on_script_edit_requested)
             else:
                 card = ScriptSettingCard(
                     script_config,

@@ -195,7 +195,6 @@ class PythonScriptSettingCard(ScriptCardMixin, DraggableListItem):
     value_changed = Signal(ScriptConfig)
     deleted = Signal(int)
     attach_changed = Signal()
-    setting_requested = Signal(object)
 
     def __init__(self, config: ScriptConfig, chain_config: ScriptChainConfig,
                  index: int = 0, parent=None,
@@ -216,10 +215,6 @@ class PythonScriptSettingCard(ScriptCardMixin, DraggableListItem):
         self.run_btn.setToolTip('调试运行')
         self.run_btn.clicked.connect(self.on_run_clicked)
 
-        self.setting_btn = TransparentToolButton(FluentIcon.SETTING, None)
-        self.setting_btn.setToolTip('设置')
-        self.setting_btn.clicked.connect(self.on_setting_clicked)
-
         content_widget = MultiPushSettingCard(
             icon=FluentIcon.CODE,
             title=self._get_title(),
@@ -228,7 +223,6 @@ class PythonScriptSettingCard(ScriptCardMixin, DraggableListItem):
                 self.attach_up_btn,
                 self.attach_down_btn,
                 self.run_btn,
-                self.setting_btn,
                 self.edit_btn,
                 self.delete_btn,
                 self.enable_switch,
@@ -316,10 +310,6 @@ class PythonScriptSettingCard(ScriptCardMixin, DraggableListItem):
             show_success(self.window(), '调试运行', f'已在终端启动 {display}')
         except Exception as e:
             show_error(self.window(), '启动失败', str(e))
-
-    def on_setting_clicked(self) -> None:
-        """请求进入脚本设置二级界面。"""
-        self.setting_requested.emit(self)
 
     def on_edit_clicked(self) -> None:
         """编辑 Python 脚本。外部脚本定位到文件，内部脚本弹窗编辑。"""
