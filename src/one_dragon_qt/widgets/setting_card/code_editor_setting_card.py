@@ -500,6 +500,10 @@ class PythonCodeEditorDialog(BaseCodeEditorDialog):
     def _setup_editor_layout(self) -> None:
         self.highlighter = PythonHighlighter(self.editor.document())
 
+        self._setup_arguments_layout()
+        self.viewLayout.addWidget(self.editor)
+
+    def _setup_arguments_layout(self) -> None:
         args_layout = QHBoxLayout()
         args_label = BodyLabel("启动参数: ")
         self.args_input = LineEdit()
@@ -510,7 +514,6 @@ class PythonCodeEditorDialog(BaseCodeEditorDialog):
 
         self.viewLayout.addLayout(args_layout)
         self.viewLayout.addSpacing(8)
-        self.viewLayout.addWidget(self.editor)
 
     def _on_external_edit(self) -> None:
         if not self._script_path:
